@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>0.1</Version>
+    <Version>0.2</Version>
     <Authors>Hassan Habib</Authors>
     <Description>RESTFulLinq is a library that allows you to send LINQ statements to your .NET API and execute these queries on the server /database in a fluent API fashion.</Description>
     <Copyright>Copyright (c) Hassan Habib</Copyright>
