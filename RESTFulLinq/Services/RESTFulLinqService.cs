@@ -25,7 +25,7 @@ namespace RESTFulLinq
                 using System.Linq;
                 using System.Collections.Generic;
                 
-                return DataSource.{linQuery ?? "AsQueryable()"};", scriptOptions, globals);
+                return DataSource.{linQuery ?? "ToList()"};", scriptOptions, globals);
 
             return state.ReturnValue;
         }

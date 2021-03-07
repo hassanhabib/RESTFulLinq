@@ -8,6 +8,12 @@
     <Copyright>Copyright (c) Hassan Habib</Copyright>
     <PackageIcon>RESTFulLinq.png</PackageIcon>
     <PackageProjectUrl>https://www.hassanhabib.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hassanhabib/RESTFulLinq</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <PackageTags>RESTFul APIs</PackageTags>
+    <PackageReleaseNotes>This is a beta version - it allows basic operations with LINQ such as Where, Select (non anonymous types), Skip, Take and FirstOrDefault</PackageReleaseNotes>
+    <NeutralLanguage>English</NeutralLanguage>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,6 +38,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="License.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="Resources\RESTFulLinq.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
