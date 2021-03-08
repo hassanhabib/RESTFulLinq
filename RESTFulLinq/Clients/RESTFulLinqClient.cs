@@ -73,7 +73,32 @@ namespace RESTFulLinq.Clients
                 $"{this.RelativeUrl}?linquery={query}");
         }
 
-        private string CleanUpQuery(string query)
+        public LinQueryable<T> OrderBy<TKey>(Expression<Func<T, TKey>> expression)
+        {
+            string query = Data.OrderBy(expression).ToString();
+            Query += query[(query.LastIndexOf("]") + 1)..];
+
+            return this;
+        }
+
+        public LinQueryable<T> OrderByDescending<TKey>(Expression<Func<T, TKey>> expression)
+        {
+            string query = Data.OrderByDescending(expression).ToString();
+            Query += query[(query.LastIndexOf("]") + 1)..];
+
+            return this;
+        }
+
+        public LinQueryable<T> OrderBy(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
+        {
+            string query = orderBy(Data).ToString();
+            Query += query[(query.LastIndexOf("]") + 1)..];
+
+            return this;
+        }
+
+        // helper functions
+        private static string CleanUpQuery(string query)
         {
             return query
                 .Replace("AndAlso", "&&")
