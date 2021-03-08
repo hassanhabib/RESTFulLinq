@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using RESTFulSense.Clients;
@@ -30,13 +32,25 @@ namespace RESTFulLinq.Clients
 
             return this;
         }
-
-        public LinQueryable<T> Select(Expression<Func<T, object>> predicate)
+        
+        public LinQueryable<TResult> Select<TResult>(Expression<Func<T, TResult>> predicate)
         {
             string query = Data.Select(predicate).ToString();
-            Query += query[(query.LastIndexOf("]") + 1)..];
+            query = query[(query.LastIndexOf("]") + 1)..];
+            query = FixAnonymousSelect(query);
 
-            return this;
+            if (typeof(T) == typeof(TResult))
+            {
+                Query += query;
+                return this as LinQueryable<TResult>;
+            }
+
+            return new LinQueryable<TResult>
+            {
+                RelativeUrl = RelativeUrl,
+                Client = Client,
+                Query = Query += query
+            };
         }
 
         public LinQueryable<T> FirstOrDefault(Expression<Func<T, bool>> predicate)
@@ -62,6 +76,8 @@ namespace RESTFulLinq.Clients
 
             return this;
         }
+
+        public Task<List<T>> ToListAsync() => ToListAsync<T>();
 
         public async Task<List<TResult>> ToListAsync<TResult>()
         {
@@ -104,5 +120,29 @@ namespace RESTFulLinq.Clients
                 .Replace("AndAlso", "&&")
                 .Replace("OrElse", "||");
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static string FixAnonymousSelect(string query)
+        {
+            while (true)
+            {
+                var match = AnonymousSelectRegex.Match(query);
+                if (!match.Success)
+                    break;
+
+                var beginGroup = match.Groups[1];
+                var selectGroup = match.Groups[3];
+                var endGroup = match.Groups[4];
+
+                query = $"{beginGroup}{{{selectGroup}}}{endGroup}";
+            }
+
+            return query;
+        }
+
+        private static readonly Regex AnonymousSelectRegex = new Regex(
+            @"(.+)(<>f__AnonymousType[^\(]+)\(([^\)]+)\)(.+)",
+            RegexOptions.Compiled
+        );
     }
 }
