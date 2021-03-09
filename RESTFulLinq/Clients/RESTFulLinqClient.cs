@@ -32,12 +32,19 @@ namespace RESTFulLinq.Clients
 
             return this;
         }
-        
-        public LinQueryable<TResult> Select<TResult>(Expression<Func<T, TResult>> predicate)
+
+        public LinQueryable<TResult> Select<TResult>(Expression<Func<T, TResult>> predicate, params Type[] localTypes)
         {
             string query = Data.Select(predicate).ToString();
             query = query[(query.LastIndexOf("]") + 1)..];
             query = FixAnonymousSelect(query);
+            if (localTypes?.Length > 0)
+            {
+                foreach (var type in localTypes)
+                {
+                    query = query.Replace($"new {type.Name}()", "new");
+                }
+            }
 
             if (typeof(T) == typeof(TResult))
             {
@@ -49,7 +56,7 @@ namespace RESTFulLinq.Clients
             {
                 RelativeUrl = RelativeUrl,
                 Client = Client,
-                Query = Query += query
+                Query = $"{Query}{query}"
             };
         }
 
