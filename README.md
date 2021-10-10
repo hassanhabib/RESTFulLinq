@@ -1,3 +1,5 @@
+[![The Standard - COMPLIANT](https://img.shields.io/badge/The_Standard-COMPLIANT-2ea44f)](https://github.com/hassanhabib/The-Standard)
+
 # RESTFulLinq
 RESTFulLinq is an easy way to send LINQ queries to your API fluently
 
